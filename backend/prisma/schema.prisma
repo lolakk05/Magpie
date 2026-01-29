@@ -1,0 +1,37 @@
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Product {
+  id  String @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  url String  @unique
+  name String
+
+  currentPrice Decimal @db.Decimal(10, 2)
+  currency String @default("PLN")
+  targetPrice Decimal @db.Decimal(10, 2)
+
+  priceSelector String? @default(".price")
+
+  isActive Boolean
+  lastScrapedAt DateTime?
+  
+  priceHistory PriceHistory[]
+}
+
+model PriceHistory {
+  id  String @id @default(uuid())
+  price Decimal @db.Decimal(10, 2)
+  scrapedAt DateTime @default(now())
+
+  product Product @relation(fields: [productId], references: [id])
+  productId String
+}
