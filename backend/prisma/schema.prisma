@@ -19,7 +19,7 @@ model Product {
   currency String @default("PLN")
   targetPrice Decimal @db.Decimal(10, 2)
 
-  priceSelector String? @default(".price")
+  priceSelector String @default(".price")
 
   isActive Boolean
   lastScrapedAt DateTime?

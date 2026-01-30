@@ -9,14 +9,19 @@ export class DatabaseController {
 
     @Get('/')
     async testRead(): Promise<Product[]> {
-        return await this.prisma.product.findMany();
+        try {
+            return await this.prisma.product.findMany();
+        } catch(error) {
+            throw error;
+        }
     }
 
     @Post('/')
     async testCreate(): Promise<void> {
-        await this.prisma.product.create({
+        try {
+            await this.prisma.product.create({
             data: {
-                url: "https:/sigma",
+                url: "https://sigma",
                 name: "sigma",
 
                 currentPrice: 10.2,
@@ -25,7 +30,9 @@ export class DatabaseController {
                 priceSelector: ".price",
 
                 isActive: true,
-            }
-        })
+            }})
+        } catch (error) {
+            throw error;
+        }
     }
 }

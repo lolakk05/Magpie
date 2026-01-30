@@ -8,15 +8,19 @@ export class DatabaseService extends PrismaClient implements OnModuleInit {
     constructor() {
         const connectionString = `${process.env.DATABASE_URL}`;
 
-        console.log('🔌 Próba połączenia z bazą. URL dostępny:', connectionString);
+        if(!connectionString || typeof connectionString != 'string' || !connectionString.trim()) {
+            throw new Error("DATABASE_URL env is not set or empty");
+        }
 
-        const pool = new Pool({connectionString});
-
-        const adapter =new PrismaPg(pool);
-
-        super({adapter})
+        try {
+            const pool = new Pool({connectionString});
+            const adapter = new PrismaPg(pool);
+            super({adapter});
+        } catch (error) {
+            throw error;    
+        }
     }
     async onModuleInit() {
-        await this.$connect;
+        await this.$connect();
     }
 }
